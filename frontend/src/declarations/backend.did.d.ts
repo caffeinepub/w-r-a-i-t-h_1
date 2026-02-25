@@ -54,23 +54,6 @@ export interface MostWanted {
   'name' : string,
   'charges' : string,
 }
-export interface UserProfile {
-  'name' : string,
-  'role' : string,
-  'department' : string,
-}
-export type UserRole = { 'admin' : null } |
-  { 'user' : null } |
-  { 'guest' : null };
-export interface Weapon {
-  'id' : bigint,
-  'status' : string,
-  'clearanceLevel' : bigint,
-  'name' : string,
-  'description' : string,
-  'weaponType' : string,
-  'department' : string,
-}
 export interface _CaffeineStorageCreateCertificateResult {
   'method' : string,
   'blob_hash' : string,
@@ -98,8 +81,6 @@ export interface _SERVICE {
     _CaffeineStorageRefillResult
   >,
   '_caffeineStorageUpdateGatewayPrincipals' : ActorMethod<[], undefined>,
-  '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
-  'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
   'banAgent' : ActorMethod<[bigint], undefined>,
   'createAgent' : ActorMethod<
     [string, string, string, string, string, AgentStatus, string, bigint],
@@ -117,29 +98,18 @@ export interface _SERVICE {
     [string, string, string, string, string, string],
     bigint
   >,
-  'createWeapon' : ActorMethod<
-    [string, string, string, string, bigint, string],
-    bigint
-  >,
   'deleteAsset' : ActorMethod<[bigint], undefined>,
   'deleteMission' : ActorMethod<[bigint], undefined>,
   'deleteMostWanted' : ActorMethod<[bigint], undefined>,
-  'deleteWeapon' : ActorMethod<[bigint], undefined>,
   'getAgent' : ActorMethod<[bigint], Agent>,
   'getAllAgents' : ActorMethod<[], Array<Agent>>,
   'getAllAssets' : ActorMethod<[], Array<Asset>>,
   'getAllMissions' : ActorMethod<[], Array<Mission>>,
   'getAllMostWanted' : ActorMethod<[], Array<MostWanted>>,
   'getAsset' : ActorMethod<[bigint], Asset>,
-  'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
-  'getCallerUserRole' : ActorMethod<[], UserRole>,
   'getMission' : ActorMethod<[bigint], Mission>,
   'getMostWanted' : ActorMethod<[bigint], MostWanted>,
-  'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
-  'getWeapons' : ActorMethod<[], Array<Weapon>>,
-  'isCallerAdmin' : ActorMethod<[], boolean>,
   'removeAgent' : ActorMethod<[bigint], undefined>,
-  'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
   'updateAgent' : ActorMethod<
     [
       bigint,
@@ -164,10 +134,6 @@ export interface _SERVICE {
   >,
   'updateMostWanted' : ActorMethod<
     [bigint, string, string, string, string, string, string],
-    undefined
-  >,
-  'updateWeapon' : ActorMethod<
-    [bigint, string, string, string, string, bigint, string],
     undefined
   >,
 }

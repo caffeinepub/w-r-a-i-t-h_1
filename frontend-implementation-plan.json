@@ -1,83 +1,33 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Add Weapons tab to the agency portal",
+  "title": "Fix runtime error in W.R.A.I.T.H. portal after Version 12 deployment",
   "requirements": [
     {
-      "id": "REQ-2",
-      "summary": "Add React Query hooks for weapons CRUD operations following the existing pattern used for assets and other entities",
+      "id": "REQ-1",
+      "summary": "Identify and fix the error occurring in the W.R.A.I.T.H. portal after the Version 12 deployment that added admin access across all clearance level departments",
       "acceptanceCriteria": [
-        "useGetWeapons hook fetches all weapons from the backend actor",
-        "useCreateWeapon, useUpdateWeapon, useDeleteWeapon mutation hooks are implemented",
-        "All mutations invalidate the weapons query cache"
+        "The application loads without any console errors or blank screens",
+        "The Admin page renders all tabs (Agents, Missions, Assets, Most Wanted, Departments) without errors",
+        "The Departments tab displays all clearance-level department cards correctly",
+        "All existing CRUD operations for agents, missions, assets, and most-wanted continue to function",
+        "No TypeScript compilation errors are present"
       ],
       "file_operations": [
+        {
+          "path": "frontend/src/components/admin/DepartmentManager.tsx",
+          "operation": "modify",
+          "description": "Fix broken references, missing imports, or type mismatches that are causing runtime errors in the Departments tab. Ensure all department data is properly typed and rendered, and that clearance-level department cards display correctly with their availability status and navigation links."
+        },
         {
           "path": "frontend/src/hooks/useQueries.ts",
           "operation": "modify",
-          "description": "Add React Query hooks for weapons: useGetWeapons (query hook calling actor.getWeapons()), useCreateWeapon, useUpdateWeapon, useDeleteWeapon (mutation hooks calling the corresponding backend methods with automatic query cache invalidation on success). Follow the exact same pattern used for useGetAssets, useCreateAsset, useUpdateAsset, useDeleteAsset in this file."
-        }
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "summary": "Create a public-facing Weapons page displaying all agency weapons as styled cards matching the W.R.A.I.T.H. dark terminal aesthetic with clearance-level color coding",
-      "acceptanceCriteria": [
-        "Weapons page renders all weapons fetched from the backend",
-        "Each weapon card displays name, type, department, clearance level, status, and description",
-        "Clearance level is color-coded consistently with the Assets page styling",
-        "Page matches the existing dark terminal/spy aesthetic (Orbitron font, scanlines, glow effects, etc.)",
-        "Empty state is handled gracefully when no weapons exist"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/Weapons.tsx",
-          "operation": "create",
-          "description": "Create a new public Weapons page that fetches all weapons using useGetWeapons hook and displays them as cards. Each card should show: weapon name (heading), weaponType field, department, clearance level (color-coded using the same ops-* tokens from tailwind.config.js as Assets.tsx uses for clearanceLevel), status (with color indicator), and description. Group or visually separate weapons by weaponType or department using subtle dividers or headers. Apply W.R.A.I.T.H. dark terminal aesthetic (bg-ops-dark, text-ops-light, Orbitron/Rajdhani fonts, scanlines, glow effects). Show a styled empty state message when no weapons exist. Handle loading and error states gracefully."
-        }
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "summary": "Add a Weapons route and navigation link positioned alongside existing main navigation items",
-      "acceptanceCriteria": [
-        "Navigating to /weapons renders the Weapons page",
-        "A 'Weapons' link appears in both desktop and mobile navigation menus",
-        "The navigation link highlights correctly when the /weapons route is active"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/App.tsx",
-          "operation": "modify",
-          "description": "Add a new route for /weapons that renders the Weapons page component. Import Weapons from './pages/Weapons' and register the route alongside the existing agents, missions, assets, most-wanted, and admin routes in the TanStack Router configuration."
-        },
-        {
-          "path": "frontend/src/components/Navigation.tsx",
-          "operation": "modify",
-          "description": "Add a Weapons navigation link to both the desktop menu (inside the nav element) and the mobile menu (inside the mobile Sheet). Position it after the Assets link and before the Most Wanted link. Use the same Link component pattern as other menu items, with isActive highlighting when pathname equals '/weapons'. Label it 'Weapons'."
-        }
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "summary": "Create a WeaponManager admin component with full CRUD operations and add a Weapons tab to the Admin panel",
-      "acceptanceCriteria": [
-        "WeaponManager renders a table of all weapons with edit and delete actions per row",
-        "A create dialog allows adding a new weapon with all required fields",
-        "Edit dialog pre-populates fields for the selected weapon",
-        "Delete action includes a confirmation dialog",
-        "A 'Weapons' tab appears in the Admin panel and renders WeaponManager when selected"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/admin/WeaponManager.tsx",
-          "operation": "create",
-          "description": "Create a WeaponManager admin component following the exact same structure and pattern as AssetManager.tsx. Display all weapons in a table with columns for name, weaponType, department, clearanceLevel, status, and action buttons (Edit, Delete). Implement a create/edit Dialog with form fields for: name (text input), weaponType (text input), department (text input), status (text input or select), clearanceLevel (number input), description (textarea). Use the useGetWeapons, useCreateWeapon, useUpdateWeapon, useDeleteWeapon hooks. Include confirmation AlertDialog for delete actions. Apply W.R.A.I.T.H. styling consistent with other manager components."
+          "description": "Fix any broken department-related query hooks that may have been introduced in Version 12. Ensure the department query hook properly fetches and caches department data, and that query invalidation logic is correct. Verify that all query hooks for agents, missions, assets, and most-wanted remain functional."
         },
         {
           "path": "frontend/src/pages/Admin.tsx",
           "operation": "modify",
-          "description": "Add a new Weapons tab to the Tabs component alongside the existing Agents, Missions, Assets, Most Wanted, and Departments tabs. Import WeaponManager from '../components/admin/WeaponManager' and render it inside a TabsContent component with value='weapons'. Position the tab after Assets and before Most Wanted."
+          "description": "Fix any runtime exceptions in the Admin page component that prevent proper rendering of the Departments tab. Ensure the tab component properly imports and renders DepartmentManager, and that session-based authentication does not interfere with department data access. Verify all five tabs (Agents, Missions, Assets, Most Wanted, Departments) are properly wired and render without errors."
         }
       ]
     }

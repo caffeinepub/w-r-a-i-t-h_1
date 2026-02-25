@@ -8,7 +8,6 @@ import Assets from './pages/Assets';
 import MostWanted from './pages/MostWanted';
 import Admin from './pages/Admin';
 import DKSDepartment from './pages/DKSDepartment';
-import Weapons from './pages/Weapons';
 
 const queryClient = new QueryClient();
 
@@ -44,12 +43,6 @@ const assetsRoute = createRoute({
   component: Assets,
 });
 
-const weaponsRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/weapons',
-  component: Weapons,
-});
-
 const mostWantedRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/most-wanted',
@@ -73,7 +66,6 @@ const routeTree = rootRoute.addChildren([
   agentsRoute,
   missionsRoute,
   assetsRoute,
-  weaponsRoute,
   mostWantedRoute,
   adminRoute,
   dksDepartmentRoute,

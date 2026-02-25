@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Lock, Terminal, ShieldAlert, Users, Target, Package, AlertTriangle, Building2, Crosshair } from 'lucide-react';
+import { Lock, Terminal, ShieldAlert, Users, Target, Package, AlertTriangle, Building2 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AgentManager from '../components/admin/AgentManager';
 import MissionManager from '../components/admin/MissionManager';
 import AssetManager from '../components/admin/AssetManager';
 import MostWantedManager from '../components/admin/MostWantedManager';
 import DepartmentManager from '../components/admin/DepartmentManager';
-import WeaponManager from '../components/admin/WeaponManager';
 
 const ADMIN_PASSWORD = 'WRAITH123';
 const SESSION_KEY = 'wraith_admin_auth';
@@ -33,62 +32,100 @@ export default function Admin() {
       setError('');
     } else {
       setAttempts(a => a + 1);
-      setError(`ACCESS DENIED — INVALID CREDENTIALS [ATTEMPT ${attempts + 1}]`);
+      setError('ACCESS DENIED');
       setPassword('');
+      setTimeout(() => setError(''), 3000);
     }
+  };
+
+  const handleLogout = () => {
+    sessionStorage.removeItem(SESSION_KEY);
+    setAuthenticated(false);
+    setPassword('');
   };
 
   if (!authenticated) {
     return (
       <div className="min-h-[80vh] flex items-center justify-center px-4">
         <div className="w-full max-w-md">
-          <div className="terminal-border bg-ops-dark p-8 scanline">
-            <div className="flex items-center gap-3 mb-8">
-              <ShieldAlert className="h-6 w-6 text-ops-red" />
-              <div>
-                <div className="font-orbitron text-ops-red text-sm font-bold tracking-widest">RESTRICTED ACCESS</div>
-                <div className="font-mono text-ops-text-dim text-[10px] tracking-widest mt-0.5">ADMIN TERMINAL — AUTHENTICATION REQUIRED</div>
+          {/* Terminal header */}
+          <div className="terminal-border bg-ops-dark p-6 scanline">
+            <div className="text-center mb-8">
+              <div className="flex justify-center mb-4">
+                <div className="relative">
+                  <Lock className="h-12 w-12 text-ops-green glow-green" />
+                  <div className="absolute inset-0 animate-ping opacity-20">
+                    <Lock className="h-12 w-12 text-ops-green" />
+                  </div>
+                </div>
+              </div>
+              <div className="font-orbitron text-xl font-black text-ops-green glow-green tracking-widest mb-1">
+                SECURE ACCESS TERMINAL
+              </div>
+              <div className="font-mono text-[10px] text-ops-text-dim tracking-[0.3em]">
+                W.R.A.I.T.H. ADMIN PANEL — CLASSIFIED
+              </div>
+            </div>
+
+            {/* Terminal lines */}
+            <div className="bg-ops-black border border-ops-green-dim p-4 mb-6 font-mono text-xs space-y-1">
+              <div className="text-ops-green-dim">
+                <span className="text-ops-green">$</span> INITIALIZING SECURE CHANNEL...
+              </div>
+              <div className="text-ops-green-dim">
+                <span className="text-ops-green">$</span> ENCRYPTION: AES-256 ACTIVE
+              </div>
+              <div className="text-ops-green-dim">
+                <span className="text-ops-green">$</span> AWAITING AUTHENTICATION...
+                <span className="blink ml-1">█</span>
               </div>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="font-mono text-[10px] text-ops-text-dim tracking-widest block mb-1">
-                  ENTER ACCESS CODE
+                <label className="font-mono text-[10px] text-ops-text-dim tracking-widest block mb-2">
+                  ENTER ACCESS CODE:
                 </label>
-                <div className={`flex items-center border ${inputFocused ? 'border-ops-green' : 'border-ops-border'} bg-ops-black transition-colors`}>
-                  <Terminal className="h-3 w-3 text-ops-green ml-3 flex-shrink-0" />
+                <div className={`flex items-center border ${inputFocused ? 'border-ops-green' : 'border-ops-green-dim'} bg-ops-black transition-colors`}>
+                  <span className="font-mono text-ops-green px-3 text-sm select-none">{'>'}</span>
                   <input
                     type="password"
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                     onFocus={() => setInputFocused(true)}
                     onBlur={() => setInputFocused(false)}
-                    className="flex-1 bg-transparent px-3 py-2.5 font-mono text-sm text-ops-green outline-none tracking-widest"
+                    className="flex-1 bg-transparent font-mono text-sm text-ops-green py-3 pr-3 outline-none tracking-widest placeholder:text-ops-green-dim/40"
                     placeholder="••••••••"
+                    autoComplete="off"
                     autoFocus
                   />
                 </div>
               </div>
 
               {error && (
-                <div className="font-mono text-[10px] text-ops-red tracking-widest border border-ops-red/30 bg-ops-red/5 px-3 py-2">
-                  {error}
+                <div className="terminal-border-red bg-ops-red/10 p-3 text-center">
+                  <div className="font-orbitron text-ops-red text-sm font-black tracking-widest glow-red">
+                    ⚠ {error}
+                  </div>
+                  {attempts > 0 && (
+                    <div className="font-mono text-[10px] text-ops-red/70 mt-1 tracking-widest">
+                      FAILED ATTEMPTS: {attempts}
+                    </div>
+                  )}
                 </div>
               )}
 
               <button
                 type="submit"
-                className="w-full bg-ops-red/20 border border-ops-red text-ops-red font-mono text-xs tracking-widest py-2.5 hover:bg-ops-red/30 transition-colors flex items-center justify-center gap-2"
+                className="w-full bg-ops-green/10 border border-ops-green text-ops-green font-orbitron text-sm font-bold tracking-widest py-3 hover:bg-ops-green/20 transition-colors"
               >
-                <Lock className="h-3 w-3" />
                 AUTHENTICATE
               </button>
             </form>
 
-            <div className="mt-6 pt-4 border-t border-ops-border">
-              <p className="font-mono text-[9px] text-ops-text-dim tracking-widest text-center">
-                UNAUTHORIZED ACCESS ATTEMPTS ARE LOGGED AND PROSECUTED
+            <div className="mt-6 text-center">
+              <p className="font-mono text-[9px] text-ops-text-dim/50 tracking-widest">
+                UNAUTHORIZED ACCESS IS A FEDERAL OFFENSE — TITLE 50 U.S.C.
               </p>
             </div>
           </div>
@@ -98,62 +135,76 @@ export default function Admin() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
-      <div className="mb-8">
-        <div className="flex items-center justify-between">
+    <div className="max-w-7xl mx-auto px-4 py-8">
+      {/* Admin Header */}
+      <div className="terminal-border bg-ops-dark p-4 mb-8 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <ShieldAlert className="h-6 w-6 text-ops-green" />
           <div>
-            <h1 className="font-orbitron text-2xl font-black text-ops-red tracking-widest">ADMIN TERMINAL</h1>
-            <p className="font-mono text-xs text-ops-text-dim tracking-widest mt-1">W.R.A.I.T.H. OPERATIONS MANAGEMENT SYSTEM</p>
+            <div className="font-orbitron text-lg font-black text-ops-green tracking-widest">
+              ADMIN CONTROL CENTER
+            </div>
+            <div className="font-mono text-[10px] text-ops-text-dim tracking-widest">
+              FULL CREATOR ACCESS GRANTED — HANDLE WITH CARE
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5">
+            <div className="h-2 w-2 rounded-full bg-ops-green animate-pulse" />
+            <span className="font-mono text-[10px] text-ops-green tracking-widest">AUTHENTICATED</span>
           </div>
           <button
-            onClick={() => { sessionStorage.removeItem(SESSION_KEY); setAuthenticated(false); }}
-            className="font-mono text-[10px] text-ops-text-dim tracking-widest border border-ops-border px-3 py-1.5 hover:border-ops-red hover:text-ops-red transition-colors"
+            onClick={handleLogout}
+            className="font-mono text-[10px] text-ops-red border border-ops-red/50 px-3 py-1.5 hover:bg-ops-red/10 tracking-widest transition-colors"
           >
             LOGOUT
           </button>
         </div>
       </div>
 
-      <Tabs defaultValue="agents" className="space-y-6">
-        <TabsList className="bg-ops-dark border border-ops-border h-auto flex-wrap gap-1 p-1">
-          <TabsTrigger value="agents" className="font-mono text-xs tracking-widest data-[state=active]:bg-ops-green/20 data-[state=active]:text-ops-green flex items-center gap-1.5">
+      {/* Tabs */}
+      <Tabs defaultValue="agents">
+        <TabsList className="bg-ops-dark border border-ops-green-dim w-full justify-start mb-6 h-auto p-1 gap-1 flex-wrap">
+          <TabsTrigger value="agents"
+            className="font-mono text-xs tracking-widest data-[state=active]:bg-ops-green/20 data-[state=active]:text-ops-green text-ops-text-dim flex items-center gap-1.5 px-4 py-2">
             <Users className="h-3 w-3" /> AGENTS
           </TabsTrigger>
-          <TabsTrigger value="missions" className="font-mono text-xs tracking-widest data-[state=active]:bg-ops-green/20 data-[state=active]:text-ops-green flex items-center gap-1.5">
-            <Target className="h-3 w-3" /> MISSIONS
+          <TabsTrigger value="missions"
+            className="font-mono text-xs tracking-widest data-[state=active]:bg-ops-green/20 data-[state=active]:text-ops-green text-ops-text-dim flex items-center gap-1.5 px-4 py-2">
+            <Terminal className="h-3 w-3" /> MISSIONS
           </TabsTrigger>
-          <TabsTrigger value="assets" className="font-mono text-xs tracking-widest data-[state=active]:bg-ops-green/20 data-[state=active]:text-ops-green flex items-center gap-1.5">
+          <TabsTrigger value="assets"
+            className="font-mono text-xs tracking-widest data-[state=active]:bg-ops-green/20 data-[state=active]:text-ops-green text-ops-text-dim flex items-center gap-1.5 px-4 py-2">
             <Package className="h-3 w-3" /> ASSETS
           </TabsTrigger>
-          <TabsTrigger value="weapons" className="font-mono text-xs tracking-widest data-[state=active]:bg-ops-red/20 data-[state=active]:text-ops-red flex items-center gap-1.5">
-            <Crosshair className="h-3 w-3" /> WEAPONS
-          </TabsTrigger>
-          <TabsTrigger value="most-wanted" className="font-mono text-xs tracking-widest data-[state=active]:bg-ops-amber/20 data-[state=active]:text-ops-amber flex items-center gap-1.5">
+          <TabsTrigger value="most-wanted"
+            className="font-mono text-xs tracking-widest data-[state=active]:bg-ops-red/20 data-[state=active]:text-ops-red text-ops-text-dim flex items-center gap-1.5 px-4 py-2">
             <AlertTriangle className="h-3 w-3" /> MOST WANTED
           </TabsTrigger>
-          <TabsTrigger value="departments" className="font-mono text-xs tracking-widest data-[state=active]:bg-ops-green/20 data-[state=active]:text-ops-green flex items-center gap-1.5">
+          <TabsTrigger value="departments"
+            className="font-mono text-xs tracking-widest data-[state=active]:bg-ops-green/20 data-[state=active]:text-ops-green text-ops-text-dim flex items-center gap-1.5 px-4 py-2">
             <Building2 className="h-3 w-3" /> DEPARTMENTS
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="agents" className="terminal-border bg-ops-dark p-6">
-          <AgentManager />
-        </TabsContent>
-        <TabsContent value="missions" className="terminal-border bg-ops-dark p-6">
-          <MissionManager />
-        </TabsContent>
-        <TabsContent value="assets" className="terminal-border bg-ops-dark p-6">
-          <AssetManager />
-        </TabsContent>
-        <TabsContent value="weapons" className="terminal-border bg-ops-dark p-6">
-          <WeaponManager />
-        </TabsContent>
-        <TabsContent value="most-wanted" className="terminal-border bg-ops-dark p-6">
-          <MostWantedManager />
-        </TabsContent>
-        <TabsContent value="departments" className="terminal-border bg-ops-dark p-6">
-          <DepartmentManager />
-        </TabsContent>
+        <div className="terminal-border bg-ops-dark p-6">
+          <TabsContent value="agents" className="mt-0">
+            <AgentManager />
+          </TabsContent>
+          <TabsContent value="missions" className="mt-0">
+            <MissionManager />
+          </TabsContent>
+          <TabsContent value="assets" className="mt-0">
+            <AssetManager />
+          </TabsContent>
+          <TabsContent value="most-wanted" className="mt-0">
+            <MostWantedManager />
+          </TabsContent>
+          <TabsContent value="departments" className="mt-0">
+            <DepartmentManager />
+          </TabsContent>
+        </div>
       </Tabs>
     </div>
   );

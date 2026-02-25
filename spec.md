@@ -1,13 +1,12 @@
 # Specification
 
 ## Summary
-**Goal:** Add a Weapons tab to the W.R.A.I.T.H. agency portal, allowing staff to browse and admins to manage agency weapons.
+**Goal:** Fix runtime errors introduced in the W.R.A.I.T.H. portal by the Version 12 deployment that added admin access across all clearance level departments.
 
 **Planned changes:**
-- Add a `Weapon` type and CRUD functions (`createWeapon`, `getWeapons`, `updateWeapon`, `deleteWeapon`) to the backend Motoko actor with auto-incrementing IDs
-- Add React Query hooks for weapons (`useGetWeapons`, `useCreateWeapon`, `useUpdateWeapon`, `useDeleteWeapon`) with cache invalidation
-- Create a public-facing Weapons page displaying weapon cards with name, type, department, clearance level (color-coded), status, and description, matching the dark terminal aesthetic
-- Add a `/weapons` route and a Weapons navigation link alongside Agents, Missions, Assets, and Most Wanted
-- Create a `WeaponManager` admin component with full CRUD (table + create/edit/delete dialogs) and add a Weapons tab to the Admin panel
+- Inspect and fix broken references, missing imports, type mismatches, or runtime exceptions in `Admin.tsx`, `DepartmentManager.tsx`, and `useQueries.ts`
+- Ensure the Admin page and all its tabs (Agents, Missions, Assets, Most Wanted, Departments) render without errors
+- Ensure the Departments tab correctly displays all clearance-level department cards
+- Resolve any TypeScript compilation errors introduced by the latest changes
 
-**User-visible outcome:** Users can navigate to a Weapons tab to browse all agency weapons as styled cards, and admins can create, edit, and delete weapons from the admin panel.
+**User-visible outcome:** The W.R.A.I.T.H. portal loads and operates without console errors or blank screens, with all admin tabs and existing CRUD operations functioning correctly.

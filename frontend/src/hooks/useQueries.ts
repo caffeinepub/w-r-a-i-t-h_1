@@ -5,12 +5,11 @@ import type {
   Mission as BackendMission,
   Asset as BackendAsset,
   MostWanted as BackendMostWanted,
-  Weapon as BackendWeapon,
 } from '../backend';
 import { AgentStatus } from '../backend';
 
 // Re-export aliased types for use in components
-export type { BackendAgent, BackendMission, BackendAsset, BackendMostWanted, BackendWeapon };
+export type { BackendAgent, BackendMission, BackendAsset, BackendMostWanted };
 
 // ─── Agents ───────────────────────────────────────────────────────────────────
 
@@ -299,62 +298,5 @@ export function useDeleteMostWanted() {
       return actor.deleteMostWanted(id);
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['most-wanted'] }),
-  });
-}
-
-// ─── Weapons ──────────────────────────────────────────────────────────────────
-
-export function useGetWeapons() {
-  const { actor, isFetching } = useActor();
-  return useQuery<BackendWeapon[]>({
-    queryKey: ['weapons'],
-    queryFn: async () => {
-      if (!actor) return [] as BackendWeapon[];
-      const result = await actor.getWeapons();
-      return result as unknown as BackendWeapon[];
-    },
-    enabled: !!actor && !isFetching,
-  });
-}
-
-export function useCreateWeapon() {
-  const { actor } = useActor();
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: async (data: {
-      name: string; weaponType: string; department: string;
-      status: string; clearanceLevel: bigint; description: string;
-    }) => {
-      if (!actor) throw new Error('No actor');
-      return actor.createWeapon(data.name, data.weaponType, data.department, data.status, data.clearanceLevel, data.description);
-    },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['weapons'] }),
-  });
-}
-
-export function useUpdateWeapon() {
-  const { actor } = useActor();
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: async (data: {
-      id: bigint; name: string; weaponType: string; department: string;
-      status: string; clearanceLevel: bigint; description: string;
-    }) => {
-      if (!actor) throw new Error('No actor');
-      return actor.updateWeapon(data.id, data.name, data.weaponType, data.department, data.status, data.clearanceLevel, data.description);
-    },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['weapons'] }),
-  });
-}
-
-export function useDeleteWeapon() {
-  const { actor } = useActor();
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: async (id: bigint) => {
-      if (!actor) throw new Error('No actor');
-      return actor.deleteWeapon(id);
-    },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['weapons'] }),
   });
 }

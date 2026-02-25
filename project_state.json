@@ -1,62 +1,22 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "Agency management app with admin experience, now adding a weapons tab for viewing different weapons within the agency.",
+  "summary": "New project",
   "architectural_notes": [],
   "known_issues": [],
-  "isFixRequest": false,
+  "isFixRequest": true,
   "existing_features": [
     {
-      "id": "feature-add-react-query-hooks-for-weapons-in-frontend-src-hooks-usequeries-ts-usegetweapons-usecreateweapon-useupdateweapon-usedeleteweapon-following-the-same-pattern-used-for-assets-and-other-entities-with-cache-invalidation-on-mutation",
-      "title": "Add React Query hooks for weapons in frontend/src/hooks/useQueries.ts: useGetWeapons, useCreateWeapon, useUpdateWeapon, useDeleteWeapon — following the same pattern used for assets and other entities, with cache invalidation on mutation.",
-      "reqIds": [
-        "REQ-2"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-create-a-new-public-facing-weapons-page-at-frontend-src-pages-weapons-tsx-that-displays-all-agency-weapons-as-styled-cards-matching-the-w-r-a-i-t-h-dark-terminal-aesthetic-each-card-should-show-weapon-name-type-department-clearance-level-color-coded-like-assets-status-indicator-and-description-group-or-visually-distinguish-weapons-by-type-or-department",
-      "title": "Create a new public-facing Weapons page at frontend/src/pages/Weapons.tsx that displays all agency weapons as styled cards matching the W.R.A.I.T.H. dark terminal aesthetic. Each card should show weapon name, type, department, clearance level (color-coded like Assets), status indicator, and description. Group or visually distinguish weapons by type or department.",
-      "reqIds": [
-        "REQ-3"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-add-a-weapons-route-to-the-tanstack-router-in-frontend-src-app-tsx-e-g-weapons-and-add-a-corresponding-navigation-link-in-frontend-src-components-navigation-tsx-positioned-alongside-the-existing-agents-missions-assets-and-most-wanted-links",
-      "title": "Add a 'Weapons' route to the TanStack Router in frontend/src/App.tsx (e.g., /weapons) and add a corresponding navigation link in frontend/src/components/Navigation.tsx, positioned alongside the existing Agents, Missions, Assets, and Most Wanted links.",
-      "reqIds": [
-        "REQ-4"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-create-a-weaponmanager-admin-component-at-frontend-src-components-admin-weaponmanager-tsx-with-full-crud-operations-create-edit-delete-using-a-dialog-form-and-table-view-following-the-same-pattern-as-assetmanager-tsx-fields-name-type-department-status-clearance-level-description-add-a-weapons-tab-to-the-admin-panel-in-frontend-src-pages-admin-tsx-alongside-the-existing-tabs",
-      "title": "Create a WeaponManager admin component at frontend/src/components/admin/WeaponManager.tsx with full CRUD operations (create, edit, delete) using a dialog form and table view, following the same pattern as AssetManager.tsx. Fields: name, type, department, status, clearance level, description. Add a 'Weapons' tab to the admin panel in frontend/src/pages/Admin.tsx alongside the existing tabs.",
-      "reqIds": [
-        "REQ-5"
-      ],
-      "version": 1
-    }
-  ],
-  "new_feature_requests": [
-    {
-      "id": "AR-1",
-      "summary": "Add a tab for viewing different weapons inside the agency",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-2",
-      "summary": "Add a `Weapon` type to the backend actor in backend/main.mo with fields: id (Nat), name (Text), type (Text), department (Text), status (Text), clearanceLevel (Nat), description (Text). Implement CRUD functions: createWeapon, getWeapons, updateWeapon, deleteWeapon with auto-incrementing IDs following the same pattern used for Agent, Mission, and Asset types.",
+      "id": "feature-identify-and-fix-the-error-occurring-in-the-w-r-a-i-t-h-portal-after-the-version-12-deployment-that-added-admin-access-across-all-clearance-level-departments-inspect-admin-tsx-departmentmanager-tsx-and-usequeries-ts-for-broken-references-missing-imports-type-mismatches-or-runtime-exceptions-introduced-by-the-latest-changes-and-resolve-them",
+      "title": "Identify and fix the error occurring in the W.R.A.I.T.H. portal after the Version 12 deployment that added admin access across all clearance level departments. Inspect Admin.tsx, DepartmentManager.tsx, and useQueries.ts for broken references, missing imports, type mismatches, or runtime exceptions introduced by the latest changes, and resolve them.",
       "reqIds": [
         "REQ-1"
       ],
-      "status": "pending"
+      "version": 1
     }
   ],
-  "gameProjectType": "none",
-  "projectName": "W.R.A.I.T.H. Portal",
+  "new_feature_requests": [],
+  "projectName": "Fix runtime error in W.R.A.I.T.H. portal",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

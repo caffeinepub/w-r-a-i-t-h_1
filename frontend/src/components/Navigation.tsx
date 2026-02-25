@@ -7,7 +7,6 @@ const navLinks = [
   { to: '/agents', label: 'AGENTS' },
   { to: '/missions', label: 'MISSIONS' },
   { to: '/assets', label: 'ASSETS' },
-  { to: '/weapons', label: 'WEAPONS' },
   { to: '/most-wanted', label: 'MOST WANTED' },
 ];
 

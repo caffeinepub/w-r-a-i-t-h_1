@@ -89,15 +89,9 @@ export class ExternalBlob {
         return this;
     }
 }
-export interface Mission {
-    id: bigint;
-    status: string;
-    title: string;
-    classificationLevel: string;
-    date: string;
-    description: string;
-    department: string;
-    assignedAgents: Array<bigint>;
+export interface _CaffeineStorageRefillResult {
+    success?: boolean;
+    topped_up_amount?: bigint;
 }
 export interface _CaffeineStorageRefillInformation {
     proposed_top_up_amount?: bigint;
@@ -109,15 +103,6 @@ export interface Asset {
     name: string;
     description: string;
     assetType: string;
-    department: string;
-}
-export interface Weapon {
-    id: bigint;
-    status: string;
-    clearanceLevel: bigint;
-    name: string;
-    description: string;
-    weaponType: string;
     department: string;
 }
 export interface Agent {
@@ -144,14 +129,15 @@ export interface MostWanted {
     name: string;
     charges: string;
 }
-export interface UserProfile {
-    name: string;
-    role: string;
+export interface Mission {
+    id: bigint;
+    status: string;
+    title: string;
+    classificationLevel: string;
+    date: string;
+    description: string;
     department: string;
-}
-export interface _CaffeineStorageRefillResult {
-    success?: boolean;
-    topped_up_amount?: bigint;
+    assignedAgents: Array<bigint>;
 }
 export enum AgentStatus {
     Inactive = "Inactive",
@@ -160,11 +146,6 @@ export enum AgentStatus {
     Kicked = "Kicked",
     Redacted = "Redacted"
 }
-export enum UserRole {
-    admin = "admin",
-    user = "user",
-    guest = "guest"
-}
 export interface backendInterface {
     _caffeineStorageBlobIsLive(hash: Uint8Array): Promise<boolean>;
     _caffeineStorageBlobsToDelete(): Promise<Array<Uint8Array>>;
@@ -172,40 +153,29 @@ export interface backendInterface {
     _caffeineStorageCreateCertificate(blobHash: string): Promise<_CaffeineStorageCreateCertificateResult>;
     _caffeineStorageRefillCashier(refillInformation: _CaffeineStorageRefillInformation | null): Promise<_CaffeineStorageRefillResult>;
     _caffeineStorageUpdateGatewayPrincipals(): Promise<void>;
-    _initializeAccessControlWithSecret(userSecret: string): Promise<void>;
-    assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
     banAgent(id: bigint): Promise<void>;
     createAgent(name: string, codename: string, department: string, rank: string, officerTitle: string, status: AgentStatus, bio: string, clearanceLevel: bigint): Promise<bigint>;
     createAsset(name: string, assetType: string, department: string, status: string, description: string, clearanceLevel: bigint): Promise<bigint>;
     createMission(title: string, department: string, classificationLevel: string, status: string, description: string, assignedAgents: Array<bigint>, date: string): Promise<bigint>;
     createMostWanted(name: string, alias: string, threatLevel: string, lastKnownLocation: string, charges: string, status: string): Promise<bigint>;
-    createWeapon(name: string, weaponType: string, department: string, status: string, clearanceLevel: bigint, description: string): Promise<bigint>;
     deleteAsset(id: bigint): Promise<void>;
     deleteMission(id: bigint): Promise<void>;
     deleteMostWanted(id: bigint): Promise<void>;
-    deleteWeapon(id: bigint): Promise<void>;
     getAgent(id: bigint): Promise<Agent>;
     getAllAgents(): Promise<Array<Agent>>;
     getAllAssets(): Promise<Array<Asset>>;
     getAllMissions(): Promise<Array<Mission>>;
     getAllMostWanted(): Promise<Array<MostWanted>>;
     getAsset(id: bigint): Promise<Asset>;
-    getCallerUserProfile(): Promise<UserProfile | null>;
-    getCallerUserRole(): Promise<UserRole>;
     getMission(id: bigint): Promise<Mission>;
     getMostWanted(id: bigint): Promise<MostWanted>;
-    getUserProfile(user: Principal): Promise<UserProfile | null>;
-    getWeapons(): Promise<Array<Weapon>>;
-    isCallerAdmin(): Promise<boolean>;
     removeAgent(id: bigint): Promise<void>;
-    saveCallerUserProfile(profile: UserProfile): Promise<void>;
     updateAgent(id: bigint, name: string, codename: string, department: string, rank: string, officerTitle: string, status: AgentStatus, bio: string, clearanceLevel: bigint): Promise<void>;
     updateAsset(id: bigint, name: string, assetType: string, department: string, status: string, description: string, clearanceLevel: bigint): Promise<void>;
     updateMission(id: bigint, title: string, department: string, classificationLevel: string, status: string, description: string, assignedAgents: Array<bigint>, date: string): Promise<void>;
     updateMostWanted(id: bigint, name: string, alias: string, threatLevel: string, lastKnownLocation: string, charges: string, status: string): Promise<void>;
-    updateWeapon(id: bigint, name: string, weaponType: string, department: string, status: string, clearanceLevel: bigint, description: string): Promise<void>;
 }
-import type { Agent as _Agent, AgentStatus as _AgentStatus, UserProfile as _UserProfile, UserRole as _UserRole, _CaffeineStorageRefillInformation as __CaffeineStorageRefillInformation, _CaffeineStorageRefillResult as __CaffeineStorageRefillResult } from "./declarations/backend.did.d.ts";
+import type { Agent as _Agent, AgentStatus as _AgentStatus, _CaffeineStorageRefillInformation as __CaffeineStorageRefillInformation, _CaffeineStorageRefillResult as __CaffeineStorageRefillResult } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
     async _caffeineStorageBlobIsLive(arg0: Uint8Array): Promise<boolean> {
@@ -292,34 +262,6 @@ export class Backend implements backendInterface {
             return result;
         }
     }
-    async _initializeAccessControlWithSecret(arg0: string): Promise<void> {
-        if (this.processError) {
-            try {
-                const result = await this.actor._initializeAccessControlWithSecret(arg0);
-                return result;
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor._initializeAccessControlWithSecret(arg0);
-            return result;
-        }
-    }
-    async assignCallerUserRole(arg0: Principal, arg1: UserRole): Promise<void> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.assignCallerUserRole(arg0, to_candid_UserRole_n8(this._uploadFile, this._downloadFile, arg1));
-                return result;
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.assignCallerUserRole(arg0, to_candid_UserRole_n8(this._uploadFile, this._downloadFile, arg1));
-            return result;
-        }
-    }
     async banAgent(arg0: bigint): Promise<void> {
         if (this.processError) {
             try {
@@ -337,14 +279,14 @@ export class Backend implements backendInterface {
     async createAgent(arg0: string, arg1: string, arg2: string, arg3: string, arg4: string, arg5: AgentStatus, arg6: string, arg7: bigint): Promise<bigint> {
         if (this.processError) {
             try {
-                const result = await this.actor.createAgent(arg0, arg1, arg2, arg3, arg4, to_candid_AgentStatus_n10(this._uploadFile, this._downloadFile, arg5), arg6, arg7);
+                const result = await this.actor.createAgent(arg0, arg1, arg2, arg3, arg4, to_candid_AgentStatus_n8(this._uploadFile, this._downloadFile, arg5), arg6, arg7);
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.createAgent(arg0, arg1, arg2, arg3, arg4, to_candid_AgentStatus_n10(this._uploadFile, this._downloadFile, arg5), arg6, arg7);
+            const result = await this.actor.createAgent(arg0, arg1, arg2, arg3, arg4, to_candid_AgentStatus_n8(this._uploadFile, this._downloadFile, arg5), arg6, arg7);
             return result;
         }
     }
@@ -390,20 +332,6 @@ export class Backend implements backendInterface {
             return result;
         }
     }
-    async createWeapon(arg0: string, arg1: string, arg2: string, arg3: string, arg4: bigint, arg5: string): Promise<bigint> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.createWeapon(arg0, arg1, arg2, arg3, arg4, arg5);
-                return result;
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.createWeapon(arg0, arg1, arg2, arg3, arg4, arg5);
-            return result;
-        }
-    }
     async deleteAsset(arg0: bigint): Promise<void> {
         if (this.processError) {
             try {
@@ -446,46 +374,32 @@ export class Backend implements backendInterface {
             return result;
         }
     }
-    async deleteWeapon(arg0: bigint): Promise<void> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.deleteWeapon(arg0);
-                return result;
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.deleteWeapon(arg0);
-            return result;
-        }
-    }
     async getAgent(arg0: bigint): Promise<Agent> {
         if (this.processError) {
             try {
                 const result = await this.actor.getAgent(arg0);
-                return from_candid_Agent_n12(this._uploadFile, this._downloadFile, result);
+                return from_candid_Agent_n10(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.getAgent(arg0);
-            return from_candid_Agent_n12(this._uploadFile, this._downloadFile, result);
+            return from_candid_Agent_n10(this._uploadFile, this._downloadFile, result);
         }
     }
     async getAllAgents(): Promise<Array<Agent>> {
         if (this.processError) {
             try {
                 const result = await this.actor.getAllAgents();
-                return from_candid_vec_n16(this._uploadFile, this._downloadFile, result);
+                return from_candid_vec_n14(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.getAllAgents();
-            return from_candid_vec_n16(this._uploadFile, this._downloadFile, result);
+            return from_candid_vec_n14(this._uploadFile, this._downloadFile, result);
         }
     }
     async getAllAssets(): Promise<Array<Asset>> {
@@ -544,34 +458,6 @@ export class Backend implements backendInterface {
             return result;
         }
     }
-    async getCallerUserProfile(): Promise<UserProfile | null> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.getCallerUserProfile();
-                return from_candid_opt_n17(this._uploadFile, this._downloadFile, result);
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.getCallerUserProfile();
-            return from_candid_opt_n17(this._uploadFile, this._downloadFile, result);
-        }
-    }
-    async getCallerUserRole(): Promise<UserRole> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.getCallerUserRole();
-                return from_candid_UserRole_n18(this._uploadFile, this._downloadFile, result);
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.getCallerUserRole();
-            return from_candid_UserRole_n18(this._uploadFile, this._downloadFile, result);
-        }
-    }
     async getMission(arg0: bigint): Promise<Mission> {
         if (this.processError) {
             try {
@@ -600,48 +486,6 @@ export class Backend implements backendInterface {
             return result;
         }
     }
-    async getUserProfile(arg0: Principal): Promise<UserProfile | null> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.getUserProfile(arg0);
-                return from_candid_opt_n17(this._uploadFile, this._downloadFile, result);
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.getUserProfile(arg0);
-            return from_candid_opt_n17(this._uploadFile, this._downloadFile, result);
-        }
-    }
-    async getWeapons(): Promise<Array<Weapon>> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.getWeapons();
-                return result;
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.getWeapons();
-            return result;
-        }
-    }
-    async isCallerAdmin(): Promise<boolean> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.isCallerAdmin();
-                return result;
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.isCallerAdmin();
-            return result;
-        }
-    }
     async removeAgent(arg0: bigint): Promise<void> {
         if (this.processError) {
             try {
@@ -656,31 +500,17 @@ export class Backend implements backendInterface {
             return result;
         }
     }
-    async saveCallerUserProfile(arg0: UserProfile): Promise<void> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.saveCallerUserProfile(arg0);
-                return result;
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.saveCallerUserProfile(arg0);
-            return result;
-        }
-    }
     async updateAgent(arg0: bigint, arg1: string, arg2: string, arg3: string, arg4: string, arg5: string, arg6: AgentStatus, arg7: string, arg8: bigint): Promise<void> {
         if (this.processError) {
             try {
-                const result = await this.actor.updateAgent(arg0, arg1, arg2, arg3, arg4, arg5, to_candid_AgentStatus_n10(this._uploadFile, this._downloadFile, arg6), arg7, arg8);
+                const result = await this.actor.updateAgent(arg0, arg1, arg2, arg3, arg4, arg5, to_candid_AgentStatus_n8(this._uploadFile, this._downloadFile, arg6), arg7, arg8);
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.updateAgent(arg0, arg1, arg2, arg3, arg4, arg5, to_candid_AgentStatus_n10(this._uploadFile, this._downloadFile, arg6), arg7, arg8);
+            const result = await this.actor.updateAgent(arg0, arg1, arg2, arg3, arg4, arg5, to_candid_AgentStatus_n8(this._uploadFile, this._downloadFile, arg6), arg7, arg8);
             return result;
         }
     }
@@ -726,35 +556,15 @@ export class Backend implements backendInterface {
             return result;
         }
     }
-    async updateWeapon(arg0: bigint, arg1: string, arg2: string, arg3: string, arg4: string, arg5: bigint, arg6: string): Promise<void> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.updateWeapon(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
-                return result;
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.updateWeapon(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
-            return result;
-        }
-    }
 }
-function from_candid_AgentStatus_n14(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _AgentStatus): AgentStatus {
-    return from_candid_variant_n15(_uploadFile, _downloadFile, value);
+function from_candid_AgentStatus_n12(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _AgentStatus): AgentStatus {
+    return from_candid_variant_n13(_uploadFile, _downloadFile, value);
 }
-function from_candid_Agent_n12(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _Agent): Agent {
-    return from_candid_record_n13(_uploadFile, _downloadFile, value);
-}
-function from_candid_UserRole_n18(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _UserRole): UserRole {
-    return from_candid_variant_n19(_uploadFile, _downloadFile, value);
+function from_candid_Agent_n10(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _Agent): Agent {
+    return from_candid_record_n11(_uploadFile, _downloadFile, value);
 }
 function from_candid__CaffeineStorageRefillResult_n4(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: __CaffeineStorageRefillResult): _CaffeineStorageRefillResult {
     return from_candid_record_n5(_uploadFile, _downloadFile, value);
-}
-function from_candid_opt_n17(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_UserProfile]): UserProfile | null {
-    return value.length === 0 ? null : value[0];
 }
 function from_candid_opt_n6(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [boolean]): boolean | null {
     return value.length === 0 ? null : value[0];
@@ -762,7 +572,7 @@ function from_candid_opt_n6(_uploadFile: (file: ExternalBlob) => Promise<Uint8Ar
 function from_candid_opt_n7(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [bigint]): bigint | null {
     return value.length === 0 ? null : value[0];
 }
-function from_candid_record_n13(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+function from_candid_record_n11(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
     id: bigint;
     bio: string;
     status: _AgentStatus;
@@ -786,7 +596,7 @@ function from_candid_record_n13(_uploadFile: (file: ExternalBlob) => Promise<Uin
     return {
         id: value.id,
         bio: value.bio,
-        status: from_candid_AgentStatus_n14(_uploadFile, _downloadFile, value.status),
+        status: from_candid_AgentStatus_n12(_uploadFile, _downloadFile, value.status),
         clearanceLevel: value.clearanceLevel,
         name: value.name,
         rank: value.rank,
@@ -807,7 +617,7 @@ function from_candid_record_n5(_uploadFile: (file: ExternalBlob) => Promise<Uint
         topped_up_amount: record_opt_to_undefined(from_candid_opt_n7(_uploadFile, _downloadFile, value.topped_up_amount))
     };
 }
-function from_candid_variant_n15(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+function from_candid_variant_n13(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
     Inactive: null;
 } | {
     Active: null;
@@ -820,22 +630,10 @@ function from_candid_variant_n15(_uploadFile: (file: ExternalBlob) => Promise<Ui
 }): AgentStatus {
     return "Inactive" in value ? AgentStatus.Inactive : "Active" in value ? AgentStatus.Active : "Banned" in value ? AgentStatus.Banned : "Kicked" in value ? AgentStatus.Kicked : "Redacted" in value ? AgentStatus.Redacted : value;
 }
-function from_candid_variant_n19(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
-    admin: null;
-} | {
-    user: null;
-} | {
-    guest: null;
-}): UserRole {
-    return "admin" in value ? UserRole.admin : "user" in value ? UserRole.user : "guest" in value ? UserRole.guest : value;
+function from_candid_vec_n14(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<_Agent>): Array<Agent> {
+    return value.map((x)=>from_candid_Agent_n10(_uploadFile, _downloadFile, x));
 }
-function from_candid_vec_n16(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<_Agent>): Array<Agent> {
-    return value.map((x)=>from_candid_Agent_n12(_uploadFile, _downloadFile, x));
-}
-function to_candid_AgentStatus_n10(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: AgentStatus): _AgentStatus {
-    return to_candid_variant_n11(_uploadFile, _downloadFile, value);
-}
-function to_candid_UserRole_n8(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: UserRole): _UserRole {
+function to_candid_AgentStatus_n8(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: AgentStatus): _AgentStatus {
     return to_candid_variant_n9(_uploadFile, _downloadFile, value);
 }
 function to_candid__CaffeineStorageRefillInformation_n2(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _CaffeineStorageRefillInformation): __CaffeineStorageRefillInformation {
@@ -853,7 +651,7 @@ function to_candid_record_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint8A
         proposed_top_up_amount: value.proposed_top_up_amount ? candid_some(value.proposed_top_up_amount) : candid_none()
     };
 }
-function to_candid_variant_n11(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: AgentStatus): {
+function to_candid_variant_n9(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: AgentStatus): {
     Inactive: null;
 } | {
     Active: null;
@@ -874,21 +672,6 @@ function to_candid_variant_n11(_uploadFile: (file: ExternalBlob) => Promise<Uint
         Kicked: null
     } : value == AgentStatus.Redacted ? {
         Redacted: null
-    } : value;
-}
-function to_candid_variant_n9(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: UserRole): {
-    admin: null;
-} | {
-    user: null;
-} | {
-    guest: null;
-} {
-    return value == UserRole.admin ? {
-        admin: null
-    } : value == UserRole.user ? {
-        user: null
-    } : value == UserRole.guest ? {
-        guest: null
     } : value;
 }
 export interface CreateActorOptions {

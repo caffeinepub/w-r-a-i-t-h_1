@@ -19,11 +19,6 @@ export const _CaffeineStorageRefillResult = IDL.Record({
   'success' : IDL.Opt(IDL.Bool),
   'topped_up_amount' : IDL.Opt(IDL.Nat),
 });
-export const UserRole = IDL.Variant({
-  'admin' : IDL.Null,
-  'user' : IDL.Null,
-  'guest' : IDL.Null,
-});
 export const AgentStatus = IDL.Variant({
   'Inactive' : IDL.Null,
   'Active' : IDL.Null,
@@ -70,20 +65,6 @@ export const MostWanted = IDL.Record({
   'name' : IDL.Text,
   'charges' : IDL.Text,
 });
-export const UserProfile = IDL.Record({
-  'name' : IDL.Text,
-  'role' : IDL.Text,
-  'department' : IDL.Text,
-});
-export const Weapon = IDL.Record({
-  'id' : IDL.Nat,
-  'status' : IDL.Text,
-  'clearanceLevel' : IDL.Nat,
-  'name' : IDL.Text,
-  'description' : IDL.Text,
-  'weaponType' : IDL.Text,
-  'department' : IDL.Text,
-});
 
 export const idlService = IDL.Service({
   '_caffeineStorageBlobIsLive' : IDL.Func(
@@ -112,8 +93,6 @@ export const idlService = IDL.Service({
       [],
     ),
   '_caffeineStorageUpdateGatewayPrincipals' : IDL.Func([], [], []),
-  '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
-  'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
   'banAgent' : IDL.Func([IDL.Nat], [], []),
   'createAgent' : IDL.Func(
       [
@@ -152,34 +131,18 @@ export const idlService = IDL.Service({
       [IDL.Nat],
       [],
     ),
-  'createWeapon' : IDL.Func(
-      [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Nat, IDL.Text],
-      [IDL.Nat],
-      [],
-    ),
   'deleteAsset' : IDL.Func([IDL.Nat], [], []),
   'deleteMission' : IDL.Func([IDL.Nat], [], []),
   'deleteMostWanted' : IDL.Func([IDL.Nat], [], []),
-  'deleteWeapon' : IDL.Func([IDL.Nat], [], []),
   'getAgent' : IDL.Func([IDL.Nat], [Agent], ['query']),
   'getAllAgents' : IDL.Func([], [IDL.Vec(Agent)], ['query']),
   'getAllAssets' : IDL.Func([], [IDL.Vec(Asset)], ['query']),
   'getAllMissions' : IDL.Func([], [IDL.Vec(Mission)], ['query']),
   'getAllMostWanted' : IDL.Func([], [IDL.Vec(MostWanted)], ['query']),
   'getAsset' : IDL.Func([IDL.Nat], [Asset], ['query']),
-  'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
-  'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
   'getMission' : IDL.Func([IDL.Nat], [Mission], ['query']),
   'getMostWanted' : IDL.Func([IDL.Nat], [MostWanted], ['query']),
-  'getUserProfile' : IDL.Func(
-      [IDL.Principal],
-      [IDL.Opt(UserProfile)],
-      ['query'],
-    ),
-  'getWeapons' : IDL.Func([], [IDL.Vec(Weapon)], ['query']),
-  'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
   'removeAgent' : IDL.Func([IDL.Nat], [], []),
-  'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
   'updateAgent' : IDL.Func(
       [
         IDL.Nat,
@@ -219,11 +182,6 @@ export const idlService = IDL.Service({
       [],
       [],
     ),
-  'updateWeapon' : IDL.Func(
-      [IDL.Nat, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Nat, IDL.Text],
-      [],
-      [],
-    ),
 });
 
 export const idlInitArgs = [];
@@ -239,11 +197,6 @@ export const idlFactory = ({ IDL }) => {
   const _CaffeineStorageRefillResult = IDL.Record({
     'success' : IDL.Opt(IDL.Bool),
     'topped_up_amount' : IDL.Opt(IDL.Nat),
-  });
-  const UserRole = IDL.Variant({
-    'admin' : IDL.Null,
-    'user' : IDL.Null,
-    'guest' : IDL.Null,
   });
   const AgentStatus = IDL.Variant({
     'Inactive' : IDL.Null,
@@ -291,20 +244,6 @@ export const idlFactory = ({ IDL }) => {
     'name' : IDL.Text,
     'charges' : IDL.Text,
   });
-  const UserProfile = IDL.Record({
-    'name' : IDL.Text,
-    'role' : IDL.Text,
-    'department' : IDL.Text,
-  });
-  const Weapon = IDL.Record({
-    'id' : IDL.Nat,
-    'status' : IDL.Text,
-    'clearanceLevel' : IDL.Nat,
-    'name' : IDL.Text,
-    'description' : IDL.Text,
-    'weaponType' : IDL.Text,
-    'department' : IDL.Text,
-  });
   
   return IDL.Service({
     '_caffeineStorageBlobIsLive' : IDL.Func(
@@ -333,8 +272,6 @@ export const idlFactory = ({ IDL }) => {
         [],
       ),
     '_caffeineStorageUpdateGatewayPrincipals' : IDL.Func([], [], []),
-    '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
-    'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
     'banAgent' : IDL.Func([IDL.Nat], [], []),
     'createAgent' : IDL.Func(
         [
@@ -373,34 +310,18 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Nat],
         [],
       ),
-    'createWeapon' : IDL.Func(
-        [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Nat, IDL.Text],
-        [IDL.Nat],
-        [],
-      ),
     'deleteAsset' : IDL.Func([IDL.Nat], [], []),
     'deleteMission' : IDL.Func([IDL.Nat], [], []),
     'deleteMostWanted' : IDL.Func([IDL.Nat], [], []),
-    'deleteWeapon' : IDL.Func([IDL.Nat], [], []),
     'getAgent' : IDL.Func([IDL.Nat], [Agent], ['query']),
     'getAllAgents' : IDL.Func([], [IDL.Vec(Agent)], ['query']),
     'getAllAssets' : IDL.Func([], [IDL.Vec(Asset)], ['query']),
     'getAllMissions' : IDL.Func([], [IDL.Vec(Mission)], ['query']),
     'getAllMostWanted' : IDL.Func([], [IDL.Vec(MostWanted)], ['query']),
     'getAsset' : IDL.Func([IDL.Nat], [Asset], ['query']),
-    'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
-    'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
     'getMission' : IDL.Func([IDL.Nat], [Mission], ['query']),
     'getMostWanted' : IDL.Func([IDL.Nat], [MostWanted], ['query']),
-    'getUserProfile' : IDL.Func(
-        [IDL.Principal],
-        [IDL.Opt(UserProfile)],
-        ['query'],
-      ),
-    'getWeapons' : IDL.Func([], [IDL.Vec(Weapon)], ['query']),
-    'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
     'removeAgent' : IDL.Func([IDL.Nat], [], []),
-    'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
     'updateAgent' : IDL.Func(
         [
           IDL.Nat,
@@ -437,11 +358,6 @@ export const idlFactory = ({ IDL }) => {
       ),
     'updateMostWanted' : IDL.Func(
         [IDL.Nat, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text],
-        [],
-        [],
-      ),
-    'updateWeapon' : IDL.Func(
-        [IDL.Nat, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Nat, IDL.Text],
         [],
         [],
       ),
