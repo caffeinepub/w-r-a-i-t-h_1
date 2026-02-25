@@ -1,0 +1,182 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --radius: 0.25rem;
+    --background: 0.1 0 0;
+    --foreground: 0.88 0.04 140;
+    --card: 0.13 0.01 140;
+    --card-foreground: 0.88 0.04 140;
+    --popover: 0.15 0.01 140;
+    --popover-foreground: 0.88 0.04 140;
+    --primary: 0.55 0.18 140;
+    --primary-foreground: 0.05 0 0;
+    --secondary: 0.18 0.02 140;
+    --secondary-foreground: 0.75 0.06 140;
+    --muted: 0.16 0.01 140;
+    --muted-foreground: 0.5 0.04 140;
+    --accent: 0.22 0.03 140;
+    --accent-foreground: 0.88 0.04 140;
+    --destructive: 0.55 0.22 25;
+    --destructive-foreground: 0.98 0 0;
+    --border: 0.25 0.04 140;
+    --input: 0.2 0.03 140;
+    --ring: 0.55 0.18 140;
+    --chart-1: 0.55 0.18 140;
+    --chart-2: 0.55 0.22 25;
+    --chart-3: 0.65 0.18 80;
+    --chart-4: 0.45 0.12 200;
+    --chart-5: 0.7 0.1 140;
+    --sidebar: 0.12 0.01 140;
+    --sidebar-foreground: 0.88 0.04 140;
+    --sidebar-primary: 0.55 0.18 140;
+    --sidebar-primary-foreground: 0.05 0 0;
+    --sidebar-accent: 0.18 0.02 140;
+    --sidebar-accent-foreground: 0.75 0.06 140;
+    --sidebar-border: 0.25 0.04 140;
+    --sidebar-ring: 0.55 0.18 140;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Share Tech Mono', 'Courier New', monospace;
+    background-color: oklch(0.08 0 0);
+  }
+}
+
+@layer utilities {
+  .font-mono-tactical {
+    font-family: 'Share Tech Mono', 'Courier New', monospace;
+  }
+
+  .font-orbitron {
+    font-family: 'Orbitron', sans-serif;
+  }
+
+  .font-rajdhani {
+    font-family: 'Rajdhani', sans-serif;
+  }
+
+  .scanline {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scanline::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 255, 100, 0.015) 2px,
+      rgba(0, 255, 100, 0.015) 4px
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .tactical-grid {
+    background-image:
+      linear-gradient(rgba(0, 200, 80, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 200, 80, 0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .redacted {
+    background-color: oklch(0.15 0 0);
+    color: transparent;
+    user-select: none;
+    border-radius: 2px;
+  }
+
+  .redacted-bar {
+    background-color: oklch(0.12 0 0);
+    color: transparent;
+    display: inline-block;
+    min-width: 120px;
+    height: 1.2em;
+    border-radius: 2px;
+    vertical-align: middle;
+  }
+
+  .terminal-border {
+    border: 1px solid oklch(0.35 0.1 140);
+    box-shadow: 0 0 8px oklch(0.35 0.1 140 / 0.2), inset 0 0 8px oklch(0.35 0.1 140 / 0.05);
+  }
+
+  .terminal-border-red {
+    border: 1px solid oklch(0.55 0.22 25);
+    box-shadow: 0 0 8px oklch(0.55 0.22 25 / 0.3), inset 0 0 8px oklch(0.55 0.22 25 / 0.05);
+  }
+
+  .terminal-border-amber {
+    border: 1px solid oklch(0.65 0.18 80);
+    box-shadow: 0 0 8px oklch(0.65 0.18 80 / 0.3), inset 0 0 8px oklch(0.65 0.18 80 / 0.05);
+  }
+
+  .glow-green {
+    text-shadow: 0 0 8px oklch(0.55 0.18 140 / 0.8);
+  }
+
+  .glow-red {
+    text-shadow: 0 0 8px oklch(0.55 0.22 25 / 0.8);
+  }
+
+  .classified-stamp {
+    border: 3px solid oklch(0.55 0.22 25);
+    color: oklch(0.55 0.22 25);
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    letter-spacing: 0.3em;
+    transform: rotate(-5deg);
+    display: inline-block;
+    padding: 2px 12px;
+    opacity: 0.85;
+  }
+
+  .top-secret-stamp {
+    border: 3px solid oklch(0.65 0.18 80);
+    color: oklch(0.65 0.18 80);
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    letter-spacing: 0.3em;
+    transform: rotate(-3deg);
+    display: inline-block;
+    padding: 2px 12px;
+    opacity: 0.85;
+  }
+
+  .blink {
+    animation: blink 1.2s step-end infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  .flicker {
+    animation: flicker 4s infinite;
+  }
+
+  @keyframes flicker {
+    0%, 95%, 100% { opacity: 1; }
+    96% { opacity: 0.8; }
+    97% { opacity: 1; }
+    98% { opacity: 0.6; }
+    99% { opacity: 1; }
+  }
+}

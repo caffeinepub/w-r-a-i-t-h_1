@@ -1,0 +1,87 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-add-react-query-hooks-for-weapons-in-frontend-src-hooks-usequeries-ts-usegetweapons-usecreateweapon-useupdateweapon-usedeleteweapon-following-the-same-pattern-used-for-assets-and-other-entities-with-cache-invalidation-on-mutation",
+      "featureTitle": "Add React Query hooks for weapons in frontend/src/hooks/useQueries.ts: useGetWeapons, useCreateWeapon, useUpdateWeapon, useDeleteWeapon — following the same pattern used for assets and other entities, with cache invalidation on mutation.",
+      "files": [
+        "frontend/src/hooks/useQueries.ts"
+      ],
+      "components": [
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-create-a-new-public-facing-weapons-page-at-frontend-src-pages-weapons-tsx-that-displays-all-agency-weapons-as-styled-cards-matching-the-w-r-a-i-t-h-dark-terminal-aesthetic-each-card-should-show-weapon-name-type-department-clearance-level-color-coded-like-assets-status-indicator-and-description-group-or-visually-distinguish-weapons-by-type-or-department",
+      "featureTitle": "Create a new public-facing Weapons page at frontend/src/pages/Weapons.tsx that displays all agency weapons as styled cards matching the W.R.A.I.T.H. dark terminal aesthetic. Each card should show weapon name, type, department, clearance level (color-coded like Assets), status indicator, and description. Group or visually distinguish weapons by type or department.",
+      "files": [
+        "frontend/src/pages/Weapons.tsx"
+      ],
+      "components": [
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-weapons-route-to-the-tanstack-router-in-frontend-src-app-tsx-e-g-weapons-and-add-a-corresponding-navigation-link-in-frontend-src-components-navigation-tsx-positioned-alongside-the-existing-agents-missions-assets-and-most-wanted-links",
+      "featureTitle": "Add a 'Weapons' route to the TanStack Router in frontend/src/App.tsx (e.g., /weapons) and add a corresponding navigation link in frontend/src/components/Navigation.tsx, positioned alongside the existing Agents, Missions, Assets, and Most Wanted links.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/Navigation.tsx"
+      ],
+      "components": [
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-create-a-weaponmanager-admin-component-at-frontend-src-components-admin-weaponmanager-tsx-with-full-crud-operations-create-edit-delete-using-a-dialog-form-and-table-view-following-the-same-pattern-as-assetmanager-tsx-fields-name-type-department-status-clearance-level-description-add-a-weapons-tab-to-the-admin-panel-in-frontend-src-pages-admin-tsx-alongside-the-existing-tabs",
+      "featureTitle": "Create a WeaponManager admin component at frontend/src/components/admin/WeaponManager.tsx with full CRUD operations (create, edit, delete) using a dialog form and table view, following the same pattern as AssetManager.tsx. Fields: name, type, department, status, clearance level, description. Add a 'Weapons' tab to the admin panel in frontend/src/pages/Admin.tsx alongside the existing tabs.",
+      "files": [
+        "frontend/src/components/admin/WeaponManager.tsx",
+        "frontend/src/pages/Admin.tsx"
+      ],
+      "components": [
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    }
+  ]
+}
